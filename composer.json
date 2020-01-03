@@ -1,0 +1,19 @@
+{
+  "name": "user/redberylit-plugin",
+  "description": "redberylit plugin",
+  "type": "project",
+  "license": "GPL",
+  "authors": [
+    {
+      "name": "Safry",
+      "email": "safry@redberylit.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Inc\\": "./inc"
+    }
+  }
+}

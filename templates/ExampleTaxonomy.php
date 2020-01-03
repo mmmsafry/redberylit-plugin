@@ -1,0 +1,1 @@
+<h1>Template -> Taxonomy </h1>
