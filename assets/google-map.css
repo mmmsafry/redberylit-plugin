@@ -1,0 +1,17 @@
+#map {
+    width: 100%;
+    -webkit-box-shadow: 10px 7px 5px -5px rgba(0,0,0,0.4);
+    -moz-box-shadow: 10px 7px 5px -5px rgba(0,0,0,0.4);
+    box-shadow: 10px 7px 5px -5px rgba(0,0,0,0.4);
+    height: 478px;
+    border-radius: 4px;
+}
+
+#map2 {
+    width: 100%;
+    -webkit-box-shadow: 10px 7px 5px -5px rgba(0,0,0,0.4);
+    -moz-box-shadow: 10px 7px 5px -5px rgba(0,0,0,0.4);
+    box-shadow: 10px 7px 5px -5px rgba(0,0,0,0.4);
+    height: 420px;
+    border-radius: 4px;
+}

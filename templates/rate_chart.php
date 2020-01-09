@@ -135,7 +135,14 @@ class rate_chart
     {
         if (!empty($data)) {
             foreach ($data as $key => $amount) {
-                $q = "UPDATE $this->table_rate SET amount=$amount WHERE `type`='$preFix' AND rate_range_id=$key AND rate_chart_id=$rate_chart_id  ";
+                $q_t = "SELECT * FROM $this->table_rate  WHERE `type`='$preFix' AND rate_range_id=$key AND rate_chart_id=$rate_chart_id ";
+                $r = $this->wpdb->get_row();
+                if (!empty($r)) {
+                    $q = "UPDATE $this->table_rate SET amount=$amount WHERE `type`='$preFix' AND rate_range_id=$key AND rate_chart_id=$rate_chart_id  ";
+                } else {
+                    $q = "INSERT INTO $this->table_rate (`rate_chart_id`, `rate_range_id`,  `amount`,  `type` )  VALUES ($rate_chart_id , $key ,$amount,  '$preFix' )";
+                }
+
                 $this->wpdb->query($q);
             }
         }
@@ -316,6 +323,46 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
 
 ?>
 
+    <style>
+        #table-div {
+            width: 80%;
+            overflow-x: scroll;
+            margin-left: 20em;
+            overflow-y: visible;
+            padding: 0;
+        }
+
+        .headcol {
+            position: absolute;
+            width: 3em;
+            left: 0;
+            top: auto;
+            border-top-width: 1px;
+            /*only relevant for first row*/
+            margin-top: -1px;
+            /*compensate for top border*/
+
+
+            text-overflow: ellipsis;   /* IE, Safari (WebKit) */
+            overflow:hidden;              /* don't show excess chars */
+            white-space:nowrap;           /* force single line */
+
+            background: white;
+            /*border: 1px solid #5273aa6b;*/
+        }
+        .space{
+            left:35px;
+        }
+        .space2{
+            left:76px;
+            width: 170px;
+        }
+
+        tr:hover{
+            background-color: #cedff9;
+        }
+
+    </style>
     <div class="wrap">
         <h1 class="wp-heading-inline">Rate Chart </h1>
         <?php
@@ -326,15 +373,15 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
         print_r($vehicle_list[0]);
         echo '</pre>';*/
         ?>
-        <div style="overflow: auto;">
+        <div style="overflow: auto;" id="table-div">
             <table class="widefat display" id="example" style="width:130%">
                 <!--border="1" cellspacing="0" cellpadding="0"-->
                 <thead>
                 <tr>
-                    <th rowspan="2">#</th>
+                    <th rowspan="2" class="headcol">#</th>
                     <!--<th rowspan="2">Category</th>-->
-                    <th rowspan="2">Edit</th>
-                    <th rowspan="2" style="width: 300px;"> Model</th>
+                    <th rowspan="2" class="headcol space">Edit</th>
+                    <th rowspan="2" class="headcol space2"> Model</th>
                     <th rowspan="2">Deposit</th>
                     <th rowspan="2">Extra KM</th>
                     <th rowspan="2">Extra Hours</th>
@@ -345,7 +392,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
                     <?php
                     if (!empty($date_range)) {
                         foreach ($date_range as $range) {
-                            echo "<th colspan='2'><strong>" . $range['description'] . "</strong></th>";
+                            echo "<th colspan='2'><strong>" . $range['description'] . "XX</strong></th>";
                         }
                     }
                     ?>
@@ -354,7 +401,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
                     <?php
                     if (!empty($date_range)) {
                         foreach ($date_range as $range) {
-                            echo "<th title='With Drive'>WD</th><th title='Self Drive'>SD</th>";
+                            echo "<th title='With Drive'>WD</th><th title='Self Drive'>SDCCC</th>";
                         }
                     }
                     ?>
@@ -366,14 +413,14 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
                     $i = 0;
                     foreach ($vehicle_list as $vehicle) {
                         ?>
-                        <tr>
-                            <td><?php echo $i + 1 ?></td>
-                            <td>
+                        <tr title="<?php echo $vehicle->post_title ?>">
+                            <td class="headcol"><?php echo $i + 1 ?></td>
+                            <td class="headcol space">
                                 <a href="?page=redberylit_plugin&edit=true&id=<?php echo $vehicle->post_id ?>" class="">
                                     <span class="dashicons dashicons-edit"></span> </a>
                             </td>
                             <!--<td>-</td>-->
-                            <td style="width: 300px;">
+                            <td class="headcol space2">
                                 <?php
                                 $link = get_site_url() . "/" . $vehicle->post_type . "/" . $vehicle->post_name . "/";
                                 echo "<strong><a target='_blank' href=\"$link\" class=\"row-title\">" . $vehicle->post_title . "</a></strong>";
@@ -396,7 +443,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
                                     echo "<td>";
                                     if (!empty($range['data'])) {
                                         foreach ($range['data'] as $data_values) {
-                                            if ($data_values->type == 'WD') echo $data_values->amount;
+                                            if ($data_values->type == 'WD') echo $data_values->amount.'&nbsp;&nbsp;';
                                         }
                                     } else {
                                         echo '0';
@@ -407,7 +454,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
                                     echo "<td>";
                                     if (!empty($range['data'])) {
                                         foreach ($range['data'] as $data_values) {
-                                            if ($data_values->type == 'SD') echo $data_values->amount;
+                                            if ($data_values->type == 'SD') echo $data_values->amount.'&nbsp;&nbsp;';
                                         }
                                     } else {
                                         echo '0';

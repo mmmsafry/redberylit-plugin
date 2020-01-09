@@ -1,0 +1,45 @@
+.nav-tabs .nav-link {
+    min-height: 62px !important;
+    line-height: 1.5em !important;
+    font-size: 0.9em !important;
+    padding: .75rem 1rem .25rem 1rem;
+}
+
+.chosen-container .chosen-results li, .chosen-container-single .chosen-single span {
+    font-size: 1.0em !important;
+}
+
+.chosen-container-single .chosen-single span {
+    font-size: 0.8em !important;
+}
+
+#myTabContent .search-form-wrapper {
+    padding: 30px 40px !important;
+}
+
+#myTabContent .right-separator {
+    padding-top: 15px;
+}
+
+#myTabContent .chosen-container {
+    border: 1px solid #e4e7e8;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#airport_transfers .btn-secondary, #airport_transfers .btn-secondary:hover {
+    background-color: #594f4f;
+    color: #fff;
+}
+
+#airport_transfers .active, #airport_transfers .active:hover {
+    background-color: #50a70d;
+    color: #fff;
+}
+
+/** google map css */
+#map_output, #map_output_transfer {
+    padding: 3px;
+    font-weight: 800;
+    color: #488ef6;
+}
