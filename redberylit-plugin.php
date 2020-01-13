@@ -49,15 +49,34 @@ function deactivate_redberylit_plugin()
 register_deactivation_hook(__FILE__, 'deactivate_redberylit_plugin');
 
 
+/** need to be changed to property standard */
+
 function base_url_redberylit()
 {
-    return get_site_url() ;
+    return get_site_url();
+}
 
+
+/*Show some script only in Home page */
+add_action('wp_enqueue_scripts', 'enqueue_rb_scripts');
+function enqueue_rb_scripts()
+{
+    if((is_front_page())){
+        wp_enqueue_style('myPluginStyle', plugin_dir_path(__FILE__) . 'assets/mystyle-fontend.css');
+        wp_enqueue_style('googleMapStyle', plugin_dir_path(__FILE__) . 'assets/google-map.css');
+
+        wp_enqueue_script('myPluginScript', plugin_dir_path(__FILE__) . 'assets/myscript-fontend.js');
+        wp_enqueue_script('googleMapScript', plugin_dir_path(__FILE__) . 'assets/google-map.js');
+
+    }
 }
 
 
 
 
+/*
+add_action( 'wp', 'your_function' );
+*/
 
 
 /*
