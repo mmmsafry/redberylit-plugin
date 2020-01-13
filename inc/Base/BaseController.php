@@ -9,11 +9,13 @@ class BaseController
     public $plugin_path;
     public $plugin_url;
     public $plugin;
+    public $plugin_tmp_path;
 
     public function __construct()
     {
         $this->plugin_path = plugin_dir_path(dirname(__FILE__, 2));
         $this->plugin_url = plugin_dir_url(dirname(__FILE__, 2));
-        $this->plugin = plugin_basename(dirname(__FILE__, 3)) . '/redberylit-plugin.phpd';
+        $this->plugin = plugin_basename(dirname(__FILE__, 3)) . '/redberylit-plugin.php';
+        $this->plugin_tmp_path = plugin_basename(dirname(__FILE__, 4)) ;
     }
 }

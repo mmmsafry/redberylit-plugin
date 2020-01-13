@@ -49,6 +49,16 @@ function deactivate_redberylit_plugin()
 register_deactivation_hook(__FILE__, 'deactivate_redberylit_plugin');
 
 
+function base_url_redberylit()
+{
+    return get_site_url() ;
+
+}
+
+
+
+
+
 
 /*
 use Inc\Activate;
