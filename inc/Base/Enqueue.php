@@ -7,7 +7,7 @@ class Enqueue extends BaseController
     function register()
     {
         add_action('admin_enqueue_scripts', [$this, 'enqueue']);
-        add_action('wp_enqueue_scripts', [$this, 'enqueue_front_end']);
+        //add_action('wp_enqueue_scripts', [$this, 'enqueue_front_end']);
 
 
     }
@@ -18,6 +18,10 @@ class Enqueue extends BaseController
         wp_enqueue_script('myPluginScript', $this->plugin_url . 'assets/myscript.js');
     }
 
+    function globalPost(){
+        global $wp_query;
+        echo $wp_query->post->ID;
+    }
 
     function enqueue_front_end()
     {

@@ -61,16 +61,13 @@ function base_url_redberylit()
 add_action('wp_enqueue_scripts', 'enqueue_rb_scripts');
 function enqueue_rb_scripts()
 {
-    if((is_front_page())){
-        wp_enqueue_style('myPluginStyle', plugin_dir_path(__FILE__) . 'assets/mystyle-fontend.css');
-        wp_enqueue_style('googleMapStyle', plugin_dir_path(__FILE__) . 'assets/google-map.css');
-
-        wp_enqueue_script('myPluginScript', plugin_dir_path(__FILE__) . 'assets/myscript-fontend.js');
-        wp_enqueue_script('googleMapScript', plugin_dir_path(__FILE__) . 'assets/google-map.js');
-
+    if (is_front_page()) {
+       wp_enqueue_style('myPluginStyle', plugins_url('/redberylit-plugin/assets/mystyle-fontend.css'));
+        wp_enqueue_style('googleMapStyle', plugins_url('/redberylit-plugin/assets/google-map.css'));
+        wp_enqueue_script('myPluginScript', plugins_url('/redberylit-plugin/assets/myscript-fontend.js'));
+        wp_enqueue_script('googleMapScript', plugins_url('/redberylit-plugin/assets/google-map.js') . '');
     }
 }
-
 
 
 
