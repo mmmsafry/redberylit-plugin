@@ -39,8 +39,8 @@ class rate_chart
     private function getVehicleList()
     {
         return $vehicle_list = $this->wpdb->get_results("SELECT p.ID AS post_id, p.post_name, p.post_title, p.post_status, p.post_name, p.post_type,
-    rc.id, rc.wp_vehicle_category_id, rc.deposit, rc.extra_amount_per_km, rc.extra_amount_per_hour, rc.wedding_per_hour, rc.wedding_extra_hour_km, rc.drop_hire_per_km
-     FROM $this->table_post p LEFT JOIN $this->table_rate_chart rc ON rc.wp_post_ID = p.ID WHERE p.post_type = 'vehicle' AND p.post_status='publish'");
+    rc.id, rc.wp_vehicle_category_id, rc.deposit, rc.extra_amount_per_km, rc.extra_amount_per_hour, rc.wedding_per_hour, rc.wedding_extra_hour_km, rc.drop_hire_per_km, vc.`name` AS category_description 
+     FROM $this->table_post p LEFT JOIN $this->table_rate_chart rc ON rc.wp_post_ID = p.ID  LEFT JOIN wp_vehicles_cat vc ON vc.id = rc.wp_vehicle_category_id   WHERE p.post_type = 'vehicle' AND p.post_status='publish' ORDER BY  p.ID DESC");
     }
 
     public function getVehicleByPostID()
@@ -136,7 +136,7 @@ class rate_chart
         if (!empty($data)) {
             foreach ($data as $key => $amount) {
                 $q_t = "SELECT * FROM $this->table_rate  WHERE `type`='$preFix' AND rate_range_id=$key AND rate_chart_id=$rate_chart_id ";
-                $r = $this->wpdb->get_row();
+                $r = $this->wpdb->get_row($q_t);
                 if (!empty($r)) {
                     $q = "UPDATE $this->table_rate SET amount=$amount WHERE `type`='$preFix' AND rate_range_id=$key AND rate_chart_id=$rate_chart_id  ";
                 } else {
@@ -323,212 +323,235 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
 
 ?>
 
-    <style>
-        #table-div {
-            width: 80%;
-            overflow-x: scroll;
-            margin-left: 20em;
-            overflow-y: visible;
-            padding: 0;
+<style>
+    #table-div {
+        width: 80%;
+        overflow-x: scroll;
+        margin-left: 20em;
+        overflow-y: visible;
+        padding: 0;
+    }
+
+    .headcol {
+        position: absolute;
+        width: 3em;
+        left: 0;
+        top: auto;
+        /*border-top-width: 1px;*/
+        /*only relevant for first row*/
+        margin-top: -1px;
+        /*compensate for top border*/
+
+
+        text-overflow: ellipsis; /* IE, Safari (WebKit) */
+        overflow: hidden; /* don't show excess chars */
+        white-space: nowrap; /* force single line */
+
+        border: 1px solid #5273aa6b;
+        background: #ffecec;
+        /* border: 1px solid #5273aa6b; */
+
+    }
+
+    .space {
+        left: 35px;
+    }
+
+    .space2 {
+        left: 76px;
+        width: 170px;
+    }
+
+    tr:hover {
+        background-color: #cedff9;
+    }
+
+    .rb_input {
+        width: 80px;
+        min-height: 19px !important;
+        line-height: 0px !important;
+        padding: 0px 3px !important;
+        text-align: right;
+    }
+
+</style>
+<div class="wrap">
+    <h1 class="wp-heading-inline">Rate Chart </h1>
+    <?php
+    $rateObject = new rate_chart;
+    $date_range = $rateObject->getDateRange();
+    $vehicle_list = $rateObject->getRateChartData();
+    /*echo '<pre>';
+    print_r($vehicle_list[0]);
+    echo '</pre>';*/
+    ?>
+    <script>
+        function update_rb_chart_rate(id, post_id, tmpThis, column_name) {
+            var data = {
+                id: id,
+                post_id: post_id,
+                amount: tmpThis.value,
+                source: 'rate_chart',
+                column_name: column_name
+            };
+            var postURL = '<?php echo plugins_url('redberylit-plugin/ajax/save_rates.php'); ?>';
+            $.post(postURL, data, function (response) {
+                var obj = $.parseJSON(response);
+            });
+            return false;
         }
+    </script>
+    <div style="overflow: auto;" id="table-div">
+        <table class="widefat display" id="example" style="width:260%">
+            <!--border="1" cellspacing="0" cellpadding="0"-->
+            <thead>
+            <tr>
+                <th rowspan="2" class="headcol" style="height: 57px;">#</th>
+                <th rowspan="2" class="headcol space" style="height: 57px;">Edit</th>
+                <th rowspan="2" class="headcol space2" style="height: 57px;"> Model</th>
+                <th rowspan="2">Category</th>
+                <th rowspan="2">Deposit</th>
+                <th rowspan="2">Extra KM</th>
+                <th rowspan="2">Extra Hours</th>
+                <th rowspan="2">Wedding Per Hour</th>
+                <th rowspan="2">Wedding Extra Hours</th>
+                <th rowspan="2">Drop Hire</th>
 
-        .headcol {
-            position: absolute;
-            width: 3em;
-            left: 0;
-            top: auto;
-            border-top-width: 1px;
-            /*only relevant for first row*/
-            margin-top: -1px;
-            /*compensate for top border*/
-
-
-            text-overflow: ellipsis;   /* IE, Safari (WebKit) */
-            overflow:hidden;              /* don't show excess chars */
-            white-space:nowrap;           /* force single line */
-
-            background: white;
-            /*border: 1px solid #5273aa6b;*/
-        }
-        .space{
-            left:35px;
-        }
-        .space2{
-            left:76px;
-            width: 170px;
-        }
-
-        tr:hover{
-            background-color: #cedff9;
-        }
-
-    </style>
-    <div class="wrap">
-        <h1 class="wp-heading-inline">Rate Chart </h1>
-        <?php
-        $rateObject = new rate_chart;
-        $date_range = $rateObject->getDateRange();
-        $vehicle_list = $rateObject->getRateChartData();
-        /*echo '<pre>';
-        print_r($vehicle_list[0]);
-        echo '</pre>';*/
-        ?>
-        <div style="overflow: auto;" id="table-div">
-            <table class="widefat display" id="example" style="width:130%">
-                <!--border="1" cellspacing="0" cellpadding="0"-->
-                <thead>
-                <tr>
-                    <th rowspan="2" class="headcol">#</th>
-                    <!--<th rowspan="2">Category</th>-->
-                    <th rowspan="2" class="headcol space">Edit</th>
-                    <th rowspan="2" class="headcol space2"> Model</th>
-                    <th rowspan="2">Deposit</th>
-                    <th rowspan="2">Extra KM</th>
-                    <th rowspan="2">Extra Hours</th>
-                    <th rowspan="2">Wedding Per Hour</th>
-                    <th rowspan="2">Wedding Extra Hours</th>
-                    <th rowspan="2">Drop Hire</th>
-
-                    <?php
-                    if (!empty($date_range)) {
-                        foreach ($date_range as $range) {
-                            echo "<th colspan='2'><strong>" . $range['description'] . "XX</strong></th>";
-                        }
-                    }
-                    ?>
-                </tr>
-                <tr>
-                    <?php
-                    if (!empty($date_range)) {
-                        foreach ($date_range as $range) {
-                            echo "<th title='With Drive'>WD</th><th title='Self Drive'>SDCCC</th>";
-                        }
-                    }
-                    ?>
-                </tr>
-                </thead>
-                <tbody>
                 <?php
-                if (!empty($vehicle_list)) {
-                    $i = 0;
-                    foreach ($vehicle_list as $vehicle) {
-                        ?>
-                        <tr title="<?php echo $vehicle->post_title ?>">
-                            <td class="headcol"><?php echo $i + 1 ?></td>
-                            <td class="headcol space">
-                                <a href="?page=redberylit_plugin&edit=true&id=<?php echo $vehicle->post_id ?>" class="">
-                                    <span class="dashicons dashicons-edit"></span> </a>
-                            </td>
-                            <!--<td>-</td>-->
-                            <td class="headcol space2">
-                                <?php
-                                $link = get_site_url() . "/" . $vehicle->post_type . "/" . $vehicle->post_name . "/";
-                                echo "<strong><a target='_blank' href=\"$link\" class=\"row-title\">" . $vehicle->post_title . "</a></strong>";
-                                ?>
-                            </td>
 
-                            <td><?php echo isset($vehicle->deposit) ? $vehicle->deposit : '0' ?></td>
-                            <td><?php echo isset($vehicle->extra_amount_per_km) ? $vehicle->extra_amount_per_km : '0' ?></td>
-                            <td><?php echo isset($vehicle->extra_amount_per_hour) ? $vehicle->extra_amount_per_hour : '0' ?></td>
-                            <td><?php echo isset($vehicle->wedding_per_hour) ? $vehicle->wedding_per_hour : '0' ?></td>
-                            <td><?php echo isset($vehicle->wedding_extra_hour_km) ? $vehicle->wedding_extra_hour_km : '0' ?></td>
-                            <td><?php echo isset($vehicle->drop_hire_per_km) ? $vehicle->drop_hire_per_km : '0' ?></td>
-                            <?php
-                            /** ----------------------  Populate date range ---------------------- */
-                            if (!empty($vehicle->date_range)) {
-
-                                foreach ($vehicle->date_range as $range) {
-
-                                    /** Width Drive cell */
-                                    echo "<td>";
-                                    if (!empty($range['data'])) {
-                                        foreach ($range['data'] as $data_values) {
-                                            if ($data_values->type == 'WD') echo $data_values->amount.'&nbsp;&nbsp;';
-                                        }
-                                    } else {
-                                        echo '0';
-                                    }
-                                    echo "</td>";
-
-                                    /** Self Drive cell */
-                                    echo "<td>";
-                                    if (!empty($range['data'])) {
-                                        foreach ($range['data'] as $data_values) {
-                                            if ($data_values->type == 'SD') echo $data_values->amount.'&nbsp;&nbsp;';
-                                        }
-                                    } else {
-                                        echo '0';
-                                    }
-                                    echo "</td>";
-
-
-                                }
-                            }
-                            /** ----------------------  Populate date range End  ---------------------- */
-                            ?>
-
-                        </tr>
-                        <?php
-                        $i++;
+                if (!empty($date_range)) {
+                    foreach ($date_range as $range) {
+                        echo "<th colspan='2'><strong>" . $range['description'] . "</strong></th>";
 
                     }
                 }
-
                 ?>
+            </tr>
+            <tr>
+                <th colspan="7">&nbsp;</th>
+                <?php
 
-                </tbody>
+                if (!empty($date_range)) {
+                    foreach ($date_range as $range) {
+                        echo "<th title='With Drive'>WD </th><th title='Self Drive'>SD </th>";
+                    }
+                }
+                ?>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            if (!empty($vehicle_list)) {
+                $i = 0;
+                foreach ($vehicle_list as $vehicle) {
+                    //var_dump($vehicle);
+                    ?>
+                    <tr title="<?php echo $vehicle->post_title ?>">
+                        <td class="headcol"><?php echo $i + 1 ?></td>
+                        <td class="headcol space">
+                            <a href="?page=redberylit_plugin&edit=true&id=<?php echo $vehicle->post_id ?>" class="">
+                                <span class="dashicons dashicons-edit"></span> </a>
+                        </td>
 
-                <!-- <tfoot>
-                <tr>
-                    <th rowspan="2">#</th>
-                    <tr>Edit </tr>
-                    <th rowspan="2" style="width: 300px;"> Model</th>
+                        <td class="headcol space2">
+                            <?php
+                            $link = get_site_url() . "/" . $vehicle->post_type . "/" . $vehicle->post_name . "/";
+                            echo "<strong><a target='_blank' href=\"$link\" class=\"row-title\">" . $vehicle->post_title . "</a></strong>";
+                            ?>
+                        </td>
 
-                    <th rowspan="2">Deposit</th>
-                    <th rowspan="2">Extra KM</th>
-                    <th rowspan="2">Extra Hours</th>
-                    <th rowspan="2">Wedding Per Hour</th>
-                    <th rowspan="2">Wedding Extra Hours</th>
-                    <th rowspan="2">Drop Hire</th>
-                    <?php
-                /*                    if (!empty($date_range)) {
-                                        foreach ($date_range as $range) {
-                                            echo "<th>WD</th><th>SD</th>";
-                                        }
+                        <td><strong class="text-capitalize"><?php echo $vehicle->category_description ?></strong>
+                        </td>
+                        <td>
+                            <input onchange="update_rb_chart_rate('<?php echo $vehicle->id ?>','<?php echo $vehicle->post_id ?>',this,'deposit')"
+                                   type="number"
+                                   class="rb_input"
+                                   value="<?php echo isset($vehicle->deposit) ? $vehicle->deposit : '0' ?>"></td>
+                        <td>
+                            <input class="rb_input"
+                                   onchange="update_rb_chart_rate('<?php echo $vehicle->id ?>','<?php echo $vehicle->post_id ?>',this,'extra_amount_per_km')"
+                                   type="number"
+                                   value="<?php echo isset($vehicle->extra_amount_per_km) ? $vehicle->extra_amount_per_km : '0' ?>">
+                        </td>
+                        <td>
+                            <input class="rb_input" type="number"
+                                   onchange="update_rb_chart_rate('<?php echo $vehicle->id ?>','<?php echo $vehicle->post_id ?>',this,'extra_amount_per_hour')"
+                                   value="<?php echo isset($vehicle->extra_amount_per_hour) ? $vehicle->extra_amount_per_hour : '0' ?>"/>
+                        </td>
+                        <td>
+                            <input class="rb_input" type="number"
+                                   onchange="update_rb_chart_rate('<?php echo $vehicle->id ?>','<?php echo $vehicle->post_id ?>',this,'wedding_per_hour')"
+                                   value="<?php echo isset($vehicle->wedding_per_hour) ? $vehicle->wedding_per_hour : '0' ?>"/>
+                        </td>
+                        <td>
+                            <input class="rb_input" type="number"
+                                   onchange="update_rb_chart_rate('<?php echo $vehicle->id ?>','<?php echo $vehicle->post_id ?>',this,'wedding_extra_hour_km')"
+                                   value="<?php echo isset($vehicle->wedding_extra_hour_km) ? $vehicle->wedding_extra_hour_km : '0' ?>"/>
+                        </td>
+                        <td>
+                            <input class="rb_input" type="number"
+                                   onchange="update_rb_chart_rate('<?php echo $vehicle->id ?>','<?php echo $vehicle->post_id ?>',this,'drop_hire_per_km')"
+                                   value="<?php echo isset($vehicle->drop_hire_per_km) ? $vehicle->drop_hire_per_km : '0' ?>"/>
+                        </td>
+                        <?php
+                        /** ----------------------  Populate date range ---------------------- */
+                        if (!empty($vehicle->date_range)) {
+
+                            foreach ($vehicle->date_range as $range) {
+
+                                /** Width Drive cell */
+                                echo "<td>";
+                                if (!empty($range['data'])) {
+                                    foreach ($range['data'] as $data_values) {
+                                        if ($data_values->type == 'WD') echo ' ' . $data_values->amount . '&nbsp;&nbsp;';
+
                                     }
-                                    */ ?>
+                                } else {
+                                    echo '0';
+                                }
+                                echo "</td>";
 
-                </tr>
-                <tr>
-                    <?php
-                /*                    if (!empty($date_range)) {
-                                        foreach ($date_range as $range) {
-                                            echo "<th colspan='2'><strong>$range->description</strong></th>";
-                                        }
+                                /** Self Drive cell */
+                                echo "<td>";
+                                if (!empty($range['data'])) {
+                                    foreach ($range['data'] as $data_values) {
+                                        if ($data_values->type == 'SD') echo $data_values->amount . '&nbsp;&nbsp;';
+
                                     }
-                                    */ ?>
-                </tr>
-                </tfoot>-->
-            </table>
-        </div>
-
-        <?php
+                                } else {
+                                    echo '0';
+                                }
+                                echo "</td>";
 
 
-        if (isset($_POST['edit'])) {
-            $id = $_POST['eid'];
-        }
-        ?>
+                            }
+                        }
+                        /** ----------------------  Populate date range End  ---------------------- */
+                        ?>
 
-        <script type="text/javascript">
-            /*jQuery(document).ready(function () {
-                jQuery('#example').DataTable();
-            });*/
-        </script>
+                    </tr>
+                    <?php
+                    $i++;
+
+                }
+            }
+
+            ?>
+
+            </tbody>
+
+
+        </table>
     </div>
-<?php
-/*wp_register_script( 'DataTable', 'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js', null, null, true );
-wp_enqueue_script('DataTable');
 
-wp_register_style( 'DataTable', 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css' );
-wp_enqueue_style('DataTable');*/
+    <?php
+
+
+    if (isset($_POST['edit'])) {
+        $id = $_POST['eid'];
+    }
+    ?>
+
+
+</div>
+
