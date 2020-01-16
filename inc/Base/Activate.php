@@ -69,7 +69,7 @@ class Activate
         }
 
 
-        if (self::$wpdb->get_var("show tables like '" . self::$table_rate . "'") != self::$table_rate) {
+        if (self::$wpdb->get_var("show tables like '" . self::$table_rate_chart . "'") != self::$table_rate_chart) {
             $sql = "CREATE TABLE `" . self::$table_rate . "`  (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `rate_chart_id` int(11) NULL DEFAULT NULL,
@@ -81,7 +81,7 @@ class Activate
             dbDelta($sql);
         }
 
-        if (self::$wpdb->get_var("show tables like '" . self::$table_rate . "'") != self::$table_rate) {
+        if (self::$wpdb->get_var("show tables like '" . self::$table_rate_chart . "'") != self::$table_rate_chart) {
             $sql = "CREATE TABLE `" . self::$table_rate_chart . "`  (
                       `id` int(11) NOT NULL AUTO_INCREMENT,
                       `wp_post_ID` int(11) NULL DEFAULT NULL,
