@@ -400,6 +400,22 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
             });
             return false;
         }
+
+        function update_rb_chart_rate_detail(id, post_id, rate_range_id, type, tmpThis) {
+            var data = {
+                id: id,
+                type: type,
+                post_id: post_id,
+                source: 'rate_chart',
+                amount: tmpThis.value,
+                rate_range_id: rate_range_id
+            };
+            var postURL = '<?php echo plugins_url('redberylit-plugin/ajax/save_rates_detail.php'); ?>';
+            $.post(postURL, data, function (response) {
+                var obj = $.parseJSON(response);
+            });
+            return false;
+        }
     </script>
     <div style="overflow: auto;" id="table-div">
         <table class="widefat display" id="example" style="width:260%">
@@ -418,11 +434,9 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
                 <th rowspan="2">Drop Hire</th>
 
                 <?php
-
                 if (!empty($date_range)) {
                     foreach ($date_range as $range) {
                         echo "<th colspan='2'><strong>" . $range['description'] . "</strong></th>";
-
                     }
                 }
                 ?>
@@ -430,7 +444,6 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
             <tr>
                 <th colspan="7">&nbsp;</th>
                 <?php
-
                 if (!empty($date_range)) {
                     foreach ($date_range as $range) {
                         echo "<th title='With Drive'>WD </th><th title='Self Drive'>SD </th>";
@@ -501,26 +514,36 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
 
                                 /** Width Drive cell */
                                 echo "<td>";
+                                $amount = 0;
                                 if (!empty($range['data'])) {
                                     foreach ($range['data'] as $data_values) {
-                                        if ($data_values->type == 'WD') echo ' ' . $data_values->amount . '&nbsp;&nbsp;';
-
+                                        if ($data_values->type == 'WD') {
+                                            $amount = $data_values->amount;
+                                        }
                                     }
-                                } else {
-                                    echo '0';
                                 }
+                                ?>
+                                <input class="rb_input" type="number"
+                                       onchange="update_rb_chart_rate_detail('<?php echo $vehicle->id ?>','<?php echo $vehicle->post_id ?>', '<?php echo $range['id'] ?>' ,'WD',this)"
+                                       value="<?php echo $amount ?>"/>
+                                <?php
                                 echo "</td>";
 
                                 /** Self Drive cell */
                                 echo "<td>";
+                                $amount = 0;
                                 if (!empty($range['data'])) {
                                     foreach ($range['data'] as $data_values) {
-                                        if ($data_values->type == 'SD') echo $data_values->amount . '&nbsp;&nbsp;';
-
+                                        if ($data_values->type == 'SD') {
+                                            $amount = $data_values->amount;
+                                        }
                                     }
-                                } else {
-                                    echo '0';
                                 }
+                                ?>
+                                <input class="rb_input" type="number"
+                                       onchange="update_rb_chart_rate_detail('<?php echo $vehicle->id ?>','<?php echo $vehicle->post_id ?>', '<?php echo $range['id'] ?>' ,'SD',this)"
+                                       value="<?php echo $amount ?>"/>
+                                <?php
                                 echo "</td>";
 
 
