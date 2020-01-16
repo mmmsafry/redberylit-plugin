@@ -54,15 +54,17 @@ class Activate
             $sql = "CREATE TABLE `" . self::$table_vehicles_cat . "`  (
                       `id` int(11) NOT NULL AUTO_INCREMENT,
                       `name` varchar(900) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+                      `is_wedding` int(1) NULL DEFAULT 0 COMMENT 'allowed to wedding search',
+                      `is_deleted` int(1) NULL DEFAULT 0,
                       PRIMARY KEY (`id`) USING BTREE
                     );";
 
-            $sql .= "INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (1, 'Cars');
-                        INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (2, 'SUV / Cabs');
-                        INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (3, 'Vans / Buses  ');
-                        INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (4, 'Lorries');
-                        INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (5, ' Motorbikes');
-                        INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (6, 'Tuk Tuks');";
+            $sql .= "INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (1, 'Cars', 1, 0);
+                        INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (2, 'SUV / Cabs', 1, 0);
+                        INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (3, 'Vans / Buses  ', 0, 0);
+                        INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (4, 'Trucks/Lorries', 0, 0);
+                        INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (5, ' Motorbikes', 0, 0);
+                        INSERT INTO `" . self::$table_vehicles_cat . "` VALUES (6, 'Tuk Tuks', 0, 0);";
             dbDelta($sql);
         }
 
