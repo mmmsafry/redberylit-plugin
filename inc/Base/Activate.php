@@ -69,7 +69,7 @@ class Activate
         }
 
 
-        if (self::$wpdb->get_var("show tables like '" . self::$table_rate_chart . "'") != self::$table_rate_chart) {
+        if (self::$wpdb->get_var("show tables like '" . self::$table_rate . "'") != self::$table_rate) {
             $sql = "CREATE TABLE `" . self::$table_rate . "`  (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `rate_chart_id` int(11) NULL DEFAULT NULL,
@@ -98,7 +98,7 @@ class Activate
         }
 
         if (self::$wpdb->get_var("show tables like '" . self::$table_rate_range . "'") != self::$table_rate_range) {
-            $sql = "CREATE TABLE `wp_rate_range`  (
+            $sql = "CREATE TABLE `" . self::$table_rate_range . "`  (
                       `id` int(11) NOT NULL AUTO_INCREMENT,
                       `description` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
                       `min_days` int(11) NULL DEFAULT NULL,
