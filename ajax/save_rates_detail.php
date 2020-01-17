@@ -8,6 +8,7 @@ require_once(dirname(__FILE__) . '../../../../../wp-load.php');
 class rate_chart_post
 {
 
+    public $debug;
     public $table_prefix;
     public $wpdb;
     public $table_rate;
@@ -15,9 +16,12 @@ class rate_chart_post
     public $table_post;
     public $table_rate_chart;
 
+    public $rate_chart_id;
+
     public function __construct()
     {
         global $table_prefix, $wpdb;
+        $this->debug = WP_DEBUG;
         $this->table_prefix = $table_prefix;
         $this->wpdb = $wpdb;
         $this->post = $_POST;
@@ -42,29 +46,25 @@ class rate_chart_post
             $this->wpdb->query($q);
             $rate_chart_id = $this->wpdb->insert_id;
         }
-
-        return $rate_chart_id;
-
+        $this->rate_chart_id = $rate_chart_id;
     }
 
 
     public function updateRatesSpecificColumn($rate_range_id, $amount, $type)
     {
-        $rate_chart_id = $this->create_rate_chart();
+        $this->create_rate_chart();
 
-        $x = "SELECT * FROM $this->table_rate  WHERE rate_chart_id='" . $rate_chart_id . "' AND rate_range_id='" . $rate_range_id . "'  AND `type`='" . $rate_range_id . "'";
-
+        $x = "SELECT * FROM $this->table_rate  WHERE rate_chart_id='" . $this->rate_chart_id . "' AND rate_range_id='" . $rate_range_id . "'  AND `type`='" . $type . "'";
         $result = $this->wpdb->get_row($x);
         $output = [];
+        if ($this->debug) $output[] = ['operation' => 'select', 'q' => $x];
 
         if (!empty($result)) {
-            $q = "UPDATE $this->table_rate SET amount='$amount' WHERE rate_chart_id='" . $rate_chart_id . "' AND rate_range_id='" . $rate_range_id . "'  AND `type`='" . $rate_range_id . "'  ";
-            $output['operation'] = 'update';
-            $output['q'] = $q;
+            $q = "UPDATE $this->table_rate SET amount='$amount' WHERE rate_chart_id='" . $this->rate_chart_id . "' AND rate_range_id='" . $rate_range_id . "'  AND `type`='" . $type . "'  ";
+            if ($this->debug) $output[] = ['operation' => 'update', 'q' => $q];
         } else {
-            $q = "INSERT INTO $this->table_rate (`rate_chart_id`,`rate_range_id`, `amount`,`type`) VALUES ($rate_chart_id,$rate_range_id,$amount,'$type');";
-            $output['operation'] = 'insert';
-            $output['q'] = $q;
+            $q = "INSERT INTO $this->table_rate (`rate_chart_id`,`rate_range_id`, `amount`,`type`) VALUES ($this->rate_chart_id,$rate_range_id,$amount,'$type');";
+            if ($this->debug) $output[] = ['operation' => 'insert', 'q' => $q];
         }
 
         $output['result'] = $this->wpdb->query($q);
