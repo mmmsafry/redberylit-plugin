@@ -14,6 +14,8 @@ class Activate
     public static $table_rate_range;
     public static $table_rate_chart;
     public static $table_vehicles_cat;
+    public static $table_driver;
+    public static $table_vehicle_class;
 
     /**
      * Short Description. (use period)
@@ -41,6 +43,8 @@ class Activate
         self::$table_rate_range = $table_prefix . "rate_range";
         self::$table_rate_chart = $table_prefix . "rate_chart";
         self::$table_vehicles_cat = $table_prefix . 'vehicles_cat';
+        self::$table_driver = $table_prefix . 'driver';
+        self::$table_vehicle_class = $table_prefix . 'licence_class';
 
     }
 
@@ -124,6 +128,35 @@ class Activate
                         INSERT INTO `" . self::$table_rate_range . "` VALUES (15, '29-30 Days', 29, 30, 0);
                         INSERT INTO `" . self::$table_rate_range . "` VALUES (16, '31-365 Days', 31, 1000, 0);
                         INSERT INTO `" . self::$table_rate_range . "` VALUES (17, 'Excess', 0, 0, 0);";
+            dbDelta($sql);
+        }
+
+        if (self::$wpdb->get_var("show tables like '" . self::$table_driver . "'") != self::$table_driver) {
+            $sql = "CREATE TABLE `" . self::$table_driver . "`  (
+                      `ID` int(11) NOT NULL AUTO_INCREMENT,
+                      `first_name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+                      `last_name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+                      `nic` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+                      `mobile` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+                      `licence_no` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+                      PRIMARY KEY (`ID`) USING BTREE
+                    ) ENGINE = MyISAM AUTO_INCREMENT = 1;";
+
+            dbDelta($sql);
+        }
+
+        if (self::$wpdb->get_var("show tables like '" . self::$table_vehicle_class . "'") != self::$table_vehicle_class) {
+            $sql = "
+                    CREATE TABLE `" . self::$table_vehicle_class . "`  (
+                      `ID` int(11) NOT NULL AUTO_INCREMENT,
+                      `licence_code` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+                      `description` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+                      PRIMARY KEY (`ID`) USING BTREE
+                    ) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;";
+
+            $sql .= "INSERT INTO `wp_licence_class` VALUES (1, 'A1', 'Light motor cycles of which Engine Capacity does not exceeds 100CC');
+INSERT INTO `wp_licence_class` VALUES (2, 'A', 'Motorcycles of which Engine capacity exceeds 100CC');";
+
             dbDelta($sql);
         }
 
