@@ -8,6 +8,7 @@ class Enqueue extends BaseController
     {
         add_action('admin_enqueue_scripts', [$this, 'enqueue']);
        // add_action('wp_enqueue_scripts', [$this, 'enqueue_front_end']);
+       add_action('wp_enqueue_scripts', [$this, 'custom_style']);
 
     }
 
@@ -29,6 +30,10 @@ class Enqueue extends BaseController
 
         wp_enqueue_script('myPluginScript', $this->plugin_url . 'assets/myscript-fontend.js');
         wp_enqueue_script('googleMapScript', $this->plugin_url . 'assets/google-map.js');
+    }
+
+    function custom_style(){
+        wp_enqueue_style('myCustomStyle', $this->plugin_url . 'assets/custom-style.css');
     }
 
 

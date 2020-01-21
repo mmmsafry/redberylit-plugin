@@ -1,0 +1,16 @@
+input.quote
+{
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    LEFT: 0px;
+}
+.autoroyal-vehicle-block.visible{
+	padding-left: 10px;
+}
+.autoroyal-invetory-grid-view .autoroyal-vehicle-block.visible{
+	    margin-left: 5px;
+}
+.mainform .form-group{
+	    margin-bottom: 0px!important;
+}
