@@ -10,7 +10,7 @@ if (!class_exists('WP_List_Table')) {
 /**
  * Create a new table class that will extend the WP_List_Table
  */
-class ClassVehicleCategory extends WP_List_Table
+class vehicle_category extends WP_List_Table
 {
 
     public $table_prefix;
@@ -261,7 +261,7 @@ class ClassVehicleCategory extends WP_List_Table
             ?>
             <div id="col-right">
                 <?php
-                $categoryTable = new ClassVehicleCategory();
+                $categoryTable = new vehicle_category();
                 $categoryTable->prepare_items();
                 $categoryTable->display();
                 ?>

@@ -14,6 +14,7 @@ final class Init
     {
         return [
             Pages\Admin::class,
+            Pages\Driver::class,
             Base\Enqueue::class,
             Base\SettingsLinks::class,
             Base\ShortCode::class

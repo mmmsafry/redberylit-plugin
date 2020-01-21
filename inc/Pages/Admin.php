@@ -37,8 +37,6 @@ class Admin extends BaseController
 
     public function setPages()
     {
-
-
         $this->pages = [
             [
                 'page_title' => 'Manage Rates',

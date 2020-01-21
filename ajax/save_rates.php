@@ -1,6 +1,6 @@
 <?php
 
-echo dirname(__FILE__);
+dirname(__FILE__);
 
 
 require_once(dirname(__FILE__) . '../../../../../wp-load.php');
