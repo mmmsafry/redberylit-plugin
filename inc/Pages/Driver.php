@@ -30,8 +30,8 @@ class Driver extends BaseController
     {
         $this->pages = [
             [
-                'page_title' => 'Manager User',
-                'menu_title' => 'Manager User',
+                'page_title' => 'Driver',
+                'menu_title' => 'Driver',
                 'capability' => 'manage_options',
                 'menu_slug' => 'redberylit_plugin_driver',
                 'callback' => [$this->callbacks, 'driver'],
