@@ -32,7 +32,7 @@ class Admin extends BaseController
         $this->setSections();
         $this->setFields();
 
-        $this->settings->AddPages($this->pages)->withSubPage('Rate Chart')->addSubPages($this->subpages)->register();
+        $this->settings->AddPages($this->pages)->withSubPage('Self Drive')->addSubPages($this->subpages)->register();
     }
 
     public function setPages()
@@ -40,51 +40,72 @@ class Admin extends BaseController
         $this->pages = [
             [
                 'page_title' => 'Manage Rates',
-                'menu_title' => 'Manage Rate',
+                'menu_title' => 'Rate Chart',
                 'capability' => 'manage_options',
                 'menu_slug' => 'redberylit_plugin',
-                'callback' => [$this->callbacks, 'rateChart'], //adminDashboard
+                'callback' => [$this->callbacks, 'selfDriveRate'], //adminDashboard
                 'icon_url' => 'dashicons-media-spreadsheet',
                 'position' => 30
             ]
         ];
     }
 
+    /* [
+            'page_title' => 'Manage Rates',
+            'menu_title' => 'Manage Rate',
+            'capability' => 'manage_options',
+            'menu_slug' => 'redberylit_plugin',
+            'callback' => [$this->callbacks, 'rateChart'], //adminDashboard
+            'icon_url' => 'dashicons-media-spreadsheet',
+            'position' => 30
+        ]
+
+    --- sub page move to main page
+    [
+                'parent_slug' => 'redberylit_plugin',
+                'page_title' => 'Self Drive Rates',
+                'menu_title' => 'Self Drive',
+                'capability' => 'manage_options',
+                'menu_slug' => 'redberylit_rate_self_drive',
+                'callback' => [$this->callbacks, 'selfDriveRate']
+            ],
+    */
+
     public function setSubPages()
     {
         $this->subpages = [
-            /*[
+            [
                 'parent_slug' => 'redberylit_plugin',
-                'page_title' => 'Custom Post Type',
-                'menu_title' => 'CPT',
+                'page_title' => 'With Drive Rates',
+                'menu_title' => 'With Drive',
                 'capability' => 'manage_options',
-                'menu_slug' => 'redberylit_cpt',
-                'callback' => [$this->callbacks, 'customPostType']
+                'menu_slug' => 'redberylit_rate_with_drive',
+                'callback' => [$this->callbacks, 'withDriveRate']
+            ], [
+                'parent_slug' => 'redberylit_plugin',
+                'page_title' => 'Airport & Taxi Transfer Rates',
+                'menu_title' => 'Airport & Taxi',
+                'capability' => 'manage_options',
+                'menu_slug' => 'redberylit_rate_airport_taxi',
+                'callback' => [$this->callbacks, 'airportTaxi']
             ],
             [
                 'parent_slug' => 'redberylit_plugin',
-                'page_title' => 'Custom Taxonomies',
-                'menu_title' => 'taxonomies',
+                'page_title' => 'Wedding Rates',
+                'menu_title' => 'Wedding',
                 'capability' => 'manage_options',
-                'menu_slug' => 'redberylit_taxonomies',
-                'callback' => [$this->callbacks, 'exampleTaxonomy']
-            ],
-            [
-                'parent_slug' => 'redberylit_plugin',
-                'page_title' => 'Custom Widgets',
-                'menu_title' => 'Widgets',
-                'capability' => 'manage_options',
-                'menu_slug' => 'redberylit_widgets',
-                'callback' => [$this->callbacks, 'customWidget']
-            ],*/
-            [
+                'menu_slug' => 'redberylit_rate_wedding',
+                'callback' => [$this->callbacks, 'wedding']
+            ]/*
+                   [
                 'parent_slug' => 'redberylit_plugin',
                 'page_title' => 'Vehicle Category',
                 'menu_title' => 'Vehicle Category',
                 'capability' => 'manage_options',
                 'menu_slug' => 'redberylit_vehicle_category',
                 'callback' => [$this->callbacks, 'vehicleCategory']
-            ]/*,[
+            ]
+                ,[
                 'parent_slug' => 'redberylit_plugin',
                 'page_title' => 'Rate Chart',
                 'menu_title' => 'Rate Chart',
@@ -122,19 +143,20 @@ class Admin extends BaseController
             array(
                 'id' => 'redberylit_admin_index',
                 'title' => 'Settings',
-                'callback' => array( $this->callbacks, 'redberylitAdminSection' ),
+                'callback' => array($this->callbacks, 'redberylitAdminSection'),
                 'page' => 'redberylit_plugin'
             )
         );
-        $this->settings->setSections( $args );
+        $this->settings->setSections($args);
     }
+
     public function setFields()
     {
         $args = array(
             array(
                 'id' => 'text_example',
                 'title' => 'Text Example',
-                'callback' => array( $this->callbacks, 'redberylitTextExample' ),
+                'callback' => array($this->callbacks, 'redberylitTextExample'),
                 'page' => 'redberylit_plugin',
                 'section' => 'redberylit_admin_index',
                 'args' => array(
@@ -145,7 +167,7 @@ class Admin extends BaseController
             array(
                 'id' => 'first_name',
                 'title' => 'First Name',
-                'callback' => array( $this->callbacks, 'redberylitFirstName' ),
+                'callback' => array($this->callbacks, 'redberylitFirstName'),
                 'page' => 'redberylit_plugin',
                 'section' => 'redberylit_admin_index',
                 'args' => array(
@@ -154,7 +176,7 @@ class Admin extends BaseController
                 )
             )
         );
-        $this->settings->setFields( $args );
+        $this->settings->setFields($args);
     }
 
 

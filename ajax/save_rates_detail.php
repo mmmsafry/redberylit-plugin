@@ -1,8 +1,4 @@
 <?php
-
-echo dirname(__FILE__);
-
-
 require_once(dirname(__FILE__) . '../../../../../wp-load.php');
 
 class rate_chart_post
@@ -17,6 +13,7 @@ class rate_chart_post
     public $table_rate_chart;
 
     public $rate_chart_id;
+    public $source;
 
     public function __construct()
     {
@@ -31,27 +28,33 @@ class rate_chart_post
         $this->table_rate_chart = $this->wpdb->prefix . 'rate_chart';
         $this->table_rate_range = $this->wpdb->prefix . 'rate_range';
         $this->table_rate = $this->wpdb->prefix . 'rate';
+
+        $this->source = isset($_POST['source']) ? $_POST['source'] : 'rate_chart';
     }
 
     private function create_rate_chart()
     {
-        $rate_chart_id = 0;
-        $post_id = $this->post['post_id'];
-        $q = "SELECT * FROM  $this->table_rate_chart  WHERE wp_post_ID='$post_id'";
-        $r = $this->wpdb->get_row($q);
-        if (!empty($r)) {
-            $rate_chart_id = $r->id;
+        if ($this->source == 'location') {
+            $this->rate_chart_id = $this->post['post_id'];
         } else {
-            $q = "INSERT INTO $this->table_rate_chart (`wp_post_ID`) VALUES ($post_id);";
-            $this->wpdb->query($q);
-            $rate_chart_id = $this->wpdb->insert_id;
+            $post_id = $this->post['post_id'];
+            $q = "SELECT * FROM  $this->table_rate_chart  WHERE wp_post_ID='$post_id'";
+            $r = $this->wpdb->get_row($q);
+            if (!empty($r)) {
+                $this->rate_chart_id = $r->id;
+            } else {
+                $q = "INSERT INTO $this->table_rate_chart (`wp_post_ID`) VALUES ($post_id);";
+                $this->wpdb->query($q);
+
+                $this->rate_chart_id = $this->wpdb->insert_id;
+            }
         }
-        $this->rate_chart_id = $rate_chart_id;
     }
 
 
     public function updateRatesSpecificColumn($rate_range_id, $amount, $type)
     {
+
         $this->create_rate_chart();
 
         $x = "SELECT * FROM $this->table_rate  WHERE rate_chart_id='" . $this->rate_chart_id . "' AND rate_range_id='" . $rate_range_id . "'  AND `type`='" . $type . "'";

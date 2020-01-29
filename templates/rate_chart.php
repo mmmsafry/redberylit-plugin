@@ -102,6 +102,7 @@ class rate_chart
 
                                 $rate_data = $this->getRates($vehicles[$i]->date_range[$key]['id'], $vehicles[$i]->id);
                                 $vehicles[$i]->date_range[$key]['data'] = !empty($rate_data) ? $rate_data : null;
+
                             }
                         }
                     }

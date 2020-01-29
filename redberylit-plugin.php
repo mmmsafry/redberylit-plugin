@@ -47,3 +47,21 @@ function deactivate_redberylit_plugin()
 }
 
 register_deactivation_hook(__FILE__, 'deactivate_redberylit_plugin');
+
+/*Need to be organized later - Added by Milinda */
+function rb_get_country_list()
+{
+    global $woocommerce;
+    $countries_obj = newWC_Countries();
+
+    $countries = $countries_obj->__get('countries');
+    $country_list = "";
+    $country_list .= '<select class="form-control">';
+    foreach ($countries as $key => $value) {
+        $country_list .= '<option value=' . $value . '>' . $value . '</option>';
+
+    }
+    $country_list .= '</select>';
+
+    return $country_list;
+}

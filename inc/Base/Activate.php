@@ -111,24 +111,40 @@ class Activate
                       PRIMARY KEY (`id`) USING BTREE
                     );";
 
-            $sql .= "INSERT INTO `" . self::$table_rate_range . "` VALUES (1, '1-2 Days', 1, 2, 1);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (2, '3-4 Days', 3, 4, 1);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (3, '5-6 Days', 5, 6, 1);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (4, '7-8 Days', 7, 8, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (5, '9-10 Days', 9, 10, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (6, '11-12 Days', 11, 12, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (7, '13-14 Days', 13, 14, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (8, '15-16 Days', 15, 16, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (9, '17-18 Days', 17, 18, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (10, '19-20 Days', 19, 20, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (11, '21-22 Days', 21, 22, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (12, '23-24 Days', 23, 24, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (13, '25-26 Days', 25, 26, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (14, '27-28 Days', 27, 28, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (15, '29-30 Days', 29, 30, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (16, '31-365 Days', 31, 1000, 0);
-                        INSERT INTO `" . self::$table_rate_range . "` VALUES (17, 'Excess', 0, 0, 0);";
+            $sql = "CREATE TABLE `" . self::$table_rate_range . "`  (
+                      `id` int(11) NOT NULL AUTO_INCREMENT,
+                      `description` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+                      `min_days` int(11) NULL DEFAULT NULL,
+                      `max_days` int(11) NULL DEFAULT NULL,
+                      `is_active` int(1) NULL DEFAULT 1,
+                      `type` enum('RATE','WD') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'RATE' COMMENT 'WD - with Driver ',
+                      PRIMARY KEY (`id`) USING BTREE
+                    )";
+
+            $sql .= "INSERT INTO `" . self::$table_rate_range . "` VALUES (1, '1-2 Days', 0, 2, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (2, '3-4 Days', 3, 4, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (3, '5-6 Days', 5, 6, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (4, '7-8 Days', 7, 8, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (5, '9-10 Days', 9, 10, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (6, '11-12 Days', 11, 12, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (7, '13-14 Days', 13, 14, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (8, '15-16 Days', 15, 16, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (9, '17-18 Days', 17, 18, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (10, '19-20 Days', 19, 20, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (11, '21-22 Days', 21, 22, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (12, '23-24 Days', 23, 24, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (13, '25-26 Days', 25, 26, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (14, '27-28 Days', 27, 28, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (15, '29-30 Days', 29, 30, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (16, '31-365 Days', 31, 1000, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (17, 'Excess', 9999999, 9999999, 1, 'RATE');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (19, '100', 0, 0, 1, 'WD');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (20, '200', 0, 0, 1, 'WD');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (21, '300', 0, 0, 1, 'WD');
+                        INSERT INTO `" . self::$table_rate_range . "` VALUES (22, '400', 0, 0, 1, 'WD');";
+
             dbDelta($sql);
+
         }
 
         if (self::$wpdb->get_var("show tables like '" . self::$table_driver . "'") != self::$table_driver) {

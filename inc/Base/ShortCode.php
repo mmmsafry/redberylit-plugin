@@ -9,9 +9,14 @@ class ShortCode extends BaseController
     {
         add_shortcode('rb_front_end_form', [$this, 'getFormShortCode']);
         add_shortcode('base_url', [$this, 'base_url_redberylit']);
-        add_shortcode('base_url', [$this, 'base_url_redberylit']);
-
+        add_shortcode('country_list_casons', 'rb_get_country_list');
     }
+
+    function base_url_redberylit()
+    {
+        return get_site_url();
+    }
+
 
     function getFormShortCode()
     {
@@ -784,15 +789,6 @@ class ShortCode extends BaseController
 
         return $html;
 
-
-    }
-
-    function base_url_redberylit()
-    {
-        return get_site_url();
-    }
-
-    function search_result($cars){
 
     }
 

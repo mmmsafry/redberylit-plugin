@@ -62,8 +62,35 @@ class AdminCallbacks extends BaseController
         return require_once("$this->plugin_path./templates/rate_chart.php");
     }
 
-    public function wpListTable(){
+    public function wpListTable()
+    {
         return require_once("$this->plugin_path./templates/wp_list_table_example2.php");
+
+    }
+
+    /*** Rate Chart Related Template */
+
+    public function selfDriveRate()
+    {
+        return require_once("$this->plugin_path./RateChart/self_drive.php");
+
+    }
+
+    public function withDriveRate()
+    {
+        return require_once("$this->plugin_path./RateChart/with_drive.php");
+
+    }
+
+    public function airportTaxi()
+    {
+        return require_once("$this->plugin_path./RateChart/airport_taxi.php");
+
+    }
+
+    public function wedding()
+    {
+        return require_once("$this->plugin_path./RateChart/wedding.php");
 
     }
 }
