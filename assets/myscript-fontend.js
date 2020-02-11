@@ -26,7 +26,6 @@ function init_form(tabName) {
             hours24: true, //time format 24h/12h
             scrollInput: false,
             onSelectTime: function (current_time, $input) {
-                //console.log("ceva");
                 jQuery("#pickT" + tabName + ", .pickT").text(jQuery(curentHour).val());
                 jQuery('#dropHour' + tabName + '').val(jQuery('#curentHour' + tabName + '').val());
                 jQuery('#dropHour-filter' + tabName).val(jQuery('#curentHour-filter' + tabName).val());
@@ -108,9 +107,6 @@ function init_form(tabName) {
                 })
             },
             onSelectDate: function (ct, $i) {
-
-                console.log("ceva 1");
-
                 jQuery('.autoroyal-rent-booking-dates-pickup-date .date').text(jQuery('#curentDay-filter' + tabName + '').val());
 
                 var date = new Date(jQuery('#curentDay-filter' + tabName + '').val());
@@ -133,18 +129,14 @@ function init_form(tabName) {
                     setDate: jQuery('#curentDay-filter').val(),
                 });
                 jQuery('#curentDay' + tabName + '').val(jQuery('#curentDay-filter' + tabName + '').val());
-                //console.log( jQuery('#curentDay').val() );
 
                 days();
-                //diffDaysFilter();
-                //autoroyal_update_rent_car_price();
             }
         });
 
     }
 
     if (jQuery("#dropDay" + tabName + "").exists()) {
-
         jQuery('#dropDay' + tabName + '').datetimepicker({
             format: fmt,
             formatDate: fmt,
@@ -157,14 +149,11 @@ function init_form(tabName) {
             },
             onSelectDate: function (ct, $i) {
                 days();
-                //diffDaysFilter();
             }
         });
-
     }
 
     if (jQuery("#dropDay-filter" + tabName + "").exists()) {
-
         jQuery('#dropDay-filter' + tabName + '').datetimepicker({
             format: fmt,
             formatDate: fmt,
@@ -179,11 +168,8 @@ function init_form(tabName) {
                 jQuery('#dropDay' + tabName + '').val(jQuery('#dropDay-filter' + tabName + '').val());
                 jQuery('.autoroyal-rent-booking-dates-return-date .date').text(jQuery('#dropDay-filter' + tabName + '').val());
                 days();
-                //diffDaysFilter();
-                //autoroyal_update_rent_car_price();
             }
         });
-
     }
 
     function getAsDate(day, time) {
@@ -227,7 +213,6 @@ function init_form(tabName) {
 
         var new_price = 0;
         var total_sets = jQuery('#reservation-modal' + tabName + ' #car-price-sets' + tabName + ' .total-sets').val();
-        //console.log(total_sets);
 
         for (var n = 0; n <= total_sets; ++n) {
             if (jQuery('#reservation-modal' + tabName + ' #car-price-sets' + tabName + ' #price-set-period-' + n + tabName).val() <= diffDays) {
@@ -241,42 +226,31 @@ function init_form(tabName) {
 
         jQuery('.reserv-car-price-day').val(new_price);
 
-        //console.log(new_price);
-
-        // output calculate costs
         var days_num = diffDays;
         var total_p = new_price * diffDays;
         var reduced_p = new_price * diffDays;
 
         jQuery("#dayP" + tabName + " span, .dayP span").text(new_price);
-
         jQuery("#totDayP" + tabName + " span, .totDayP span").text(total_p);
         jQuery("#reserv-car-price-total" + tabName + ", #reserv-car-price-without-extras" + tabName + "").val(total_p);
-        //update_extras_total_price();
-
         jQuery('#reserv-car-price-total' + tabName + '').val(total_p);
 
     }
 
     function diffDaysFilter() {
-
         var pickup_date = $("#curentDay-filter" + tabName + "").val(),
             pickup_time = "12:00 PM",
             drop_date = $("#dropDay-filter" + tabName + "").val(),
             drop_time = "12:00 PM",
             c = 24 * 60 * 60 * 1000;
-
         var pickup = getAsDate(pickup_date, pickup_time),
             drop = getAsDate(drop_date, drop_time),
             diffDays = Math.round(Math.abs((drop - pickup) / (c)));
-
         jQuery('.autoroyal-rent-booking-dates-rental-period .date').text(diffDays);
-
     }
 
     if (jQuery(".autoroyal-rent-booking-dates").exists() || jQuery(".autoroyal-homepage-search-box-rent").exists() || jQuery("#reservation-modal" + tabName + "").exists()) {
 
-        // set curent Date
         var d = new Date();
         var month = d.getMonth() + 1;
         var day = d.getDate();
@@ -285,8 +259,6 @@ function init_form(tabName) {
         if (jQuery("#rent_pickup_date" + tabName + "").exists()) {
             output = jQuery("#rent_pickup_date" + tabName + "").val();
         }
-
-        //console.log(output);
 
         jQuery("#curentDay" + tabName + "").val(output);
         jQuery("#curentDay-filter" + tabName + "").val(output);
@@ -300,8 +272,6 @@ function init_form(tabName) {
         if (jQuery("#rent_drop_date" + tabName + "").exists()) {
             output_new = jQuery("#rent_drop_date" + tabName).val();
         }
-
-        //console.log(output_new);
 
         jQuery("#dropDay" + tabName + "").val(output_new);
         jQuery("#dropDay-filter" + tabName + "").val(output_new);
@@ -330,12 +300,8 @@ function init_form(tabName) {
         jQuery('.autoroyal-rent-booking-dates-return-date .date').text(jQuery('#dropDay-filter' + tabName + '').val());
 
         days();
-
-        //autoroyal_update_rent_car_price();
-
     }
 
-    // animate progress circles
     if (jQuery(".autoroyal-progress-circle").exists()) {
         jQuery(".autoroyal-progress-circle").on("inview", function (event, isInView) {
             if (isInView) {
@@ -345,7 +311,7 @@ function init_form(tabName) {
     }
     ;
 
-    // animate progress bars
+
     if (jQuery(".autoroyal-progress-bar-progress").exists()) {
         jQuery(".autoroyal-progress-bar-progress").on("inview", function (event, isInView) {
             if (isInView) {
@@ -358,8 +324,6 @@ function init_form(tabName) {
     ;
 
     if (jQuery("#cd-item-slider" + tabName + "").exists() || jQuery("#cd-main-carousel" + tabName + "").exists() || jQuery("#rent-me" + tabName + "").exists()) {
-
-        // bootstrap carousel touch swipe support
         jQuery("#cd-item-slider" + tabName + ", #cd-main-carousel" + tabName + ", #rent-me" + tabName + "").swipe({
             swipe: function (event, direction, distance, duration, fingerCount, fingerData) {
                 if (direction == 'left') jQuery(this).carousel('next');
@@ -377,8 +341,6 @@ function init_form(tabName) {
 /**
  * Google Map Custom Function by Redberyl IT
  * */
-
-
 
 var tmpLocation = '✈️Bandaranaike International Airport ';
 jQuery(function ($) {
@@ -411,8 +373,7 @@ jQuery(function ($) {
             $("#map2").show();
             $("#map").hide();
             $("#map_output").html('');
-            map_airport_transfer();
-
+            resetTransfer();
         } else {
             map_airport_transfer(false);
         }
@@ -422,8 +383,6 @@ jQuery(function ($) {
     $(window).keydown(function (event) {
         if (event.keyCode == 13) {
             event.preventDefault();
-            console.log('----------keydown--------- ')
-            console.log('ID '+event.target.id)
             focus_date(event.target.id);
             return false;
         }
@@ -485,8 +444,66 @@ function customSetup(tabName) {
         output = jQuery("#rent_pickup_date" + tabName).val();
     }
 
-    //console.log(output);
-
-    //jQuery("#curentDay" + tabName).val(output);
     jQuery("#curentDay-filter" + tabName).val(output);
 }
+
+function resetTransfer() {
+    $("#transfer_start").val('');
+    $("#transfer_end").val('');
+    $("#map_output_transfer").html('')
+    map_airport_transfer(false);
+}
+
+/*Return Location Code */
+function clickReturnLocation(tmpThis) {
+    console.log(tmpThis.checked);
+    if (tmpThis.checked) {
+        $("#returnLocationInput").show();
+    } else {
+        $("#returnLocationInput").hide();
+    }
+}
+
+function filterPickupAndReturnLocationValues() {
+    var tmpSelected = $("#rezerve-pickup-place-filter").val();
+    if (tmpSelected != '') {
+        $("#rezerve-return-place-filter").html('');
+        var options = '<option value="0">Select location</option>';
+        $('#rezerve-pickup-place-filter > option').each(function () {
+            if (tmpSelected != $(this).val() || $(this).val() == 0) {
+                var tmpHTML = '<option value="' + $(this).val() + '">' + $(this).text() + '</option>'
+                options = options + tmpHTML;
+                console.log('Location Added: ' + options);
+            } else {
+                console.log('Location Remove: ' + $(this).text() + ' +++ ' + $(this).val());
+            }
+
+        });
+        $("#rezerve-return-place-filter").html(options);
+        $('#rezerve-return-place-filter').trigger("chosen:updated");
+
+
+    }
+}
+
+function transfer_return_location(tmpThis) {
+    if ($(tmpThis).prop("checked") == true) {
+        $("#transfer_return_div").show();
+        setTransferValues();
+    } else if ($(tmpThis).prop("checked") == false) {
+        $("#transfer_return_div").hide();
+    }
+}
+
+function setTransferValues() {
+    setTimeout(function () {
+        if ($("#transfer_differentReturnLocation").prop("checked") == true) {
+            $("#return-transfer_end").val($("#transfer_start").val());
+            $("#return-transfer_start").val($("#transfer_end").val());
+            $("#return-curentDay-filter-transfers").val($("#curentDay-filter-transfers").val());
+            $("#return-curentHour-filter-transfers").val($("#curentHour-filter-transfers").val());
+        }
+    }, 100);
+}
+
+

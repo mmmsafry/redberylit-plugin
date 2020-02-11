@@ -14,14 +14,3 @@ input.quote
 .mainform .form-group{
 	    margin-bottom: 0px!important;
 }
-
-/*******car search result css***********************/
-.rb-sr-marks{
-    padding-left: 0;
-}
-.rb-sr-marks li {
-    list-style: none;
-    font-size: 14px;
-    line-height: 1.4rem;
-}
-/*******car search result css end  ***********************/

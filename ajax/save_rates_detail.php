@@ -34,7 +34,7 @@ class rate_chart_post
 
     private function create_rate_chart()
     {
-        if ($this->source == 'location') {
+        if ($this->source == 'location' ) {
             $this->rate_chart_id = $this->post['post_id'];
         } else {
             $post_id = $this->post['post_id'];

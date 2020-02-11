@@ -93,4 +93,10 @@ class AdminCallbacks extends BaseController
         return require_once("$this->plugin_path./RateChart/wedding.php");
 
     }
+
+    public function settings()
+    {
+        return require_once("$this->plugin_path./RateChart/settings.php");
+
+    }
 }

@@ -58,9 +58,8 @@
     background-color: #eeeeee;
 }
 
-
-.page-table tr:hover {
-    background-color: #cedff9;
+.page-table thead th {
+    font-weight: 600;
 }
 
 .page-table tbody .bg-lg:hover {
@@ -116,6 +115,14 @@
     margin-left: 20em;
     overflow-y: visible;
     padding: 0;
+}
+
+.text-danger {
+    color: darkred;
+}
+
+.ar{
+    text-align: right;
 }
 
 /** --------------------- end Page Style ---------------------  */

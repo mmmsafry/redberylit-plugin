@@ -1,4 +1,4 @@
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
 
     // store tabs variables
     var tabs = document.querySelectorAll("ul.nav-tabs > li");
@@ -22,4 +22,18 @@ window.addEventListener("load", function() {
 
     }
 
+});
+
+jQuery(function ($) {
+    $('.post-type-shop_order').find('.page-title-action').hide();
+});
+
+jQuery(function ($) {
+    $('.toplevel_page_fluent_forms').find('.el-button').hide();
+});
+
+jQuery(function ($) {
+    $('.post-type-post').find('.page-title-action').hide();
+	$('.post-type-post').find('span.trash').hide();
+	$('.toplevel_page_emailquote').find('.add-new-h2').hide();
 });

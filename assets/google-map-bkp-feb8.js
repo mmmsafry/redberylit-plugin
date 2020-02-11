@@ -44,10 +44,12 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
                     var time = response.routes[0].legs[0].duration.text;
                     var distance = response.routes[0].legs[0].distance.text;
                     $("#map_output").html(distance + '&nbsp;| &nbsp;' + time);
-                    $(".km_distance").val(distance);
+                    debugger;
+                    $("#km_distance_airport").val(distance);
                 } else {
                     $("#map_output").html('');
-                    $(".km_distance").val(0);
+                    debugger;
+                    $("#km_distance_airport").val(0);
                 }
             });
     }, 100);
@@ -121,18 +123,15 @@ function calculateAndDisplayRoute_transfers(directionsService, directionsRendere
                     travelMode: 'DRIVING'
                 },
                 function (response, status) {
-                    debugger;
                     if (status === 'OK') {
                         map_airport_transfer(true);
                         directionsRenderer.setDirections(response);
                         var time = response.routes[0].legs[0].duration.text;
                         var distance = response.routes[0].legs[0].distance.text;
                         $("#map_output_transfer").html(distance + '&nbsp;| &nbsp;' + time);
-                        $(".km_distance").val(distance);
                     } else {
                         map_airport_transfer(false);
                         $("#map_output_transfer").html('')
-                        $(".km_distance").val(0);
                     }
                 });
         }

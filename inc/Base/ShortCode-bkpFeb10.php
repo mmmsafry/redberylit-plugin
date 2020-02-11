@@ -140,7 +140,7 @@ class ShortCode extends BaseController
         <div class="tab-content" id="myTabContent">
             <input type="hidden" id="currentTabName" value="">
             <!-- ------------------------------------------- self_drive ---------------------------------------------- -->
-            <div class="tab-pane fade " id="self_drive" role="tabpanel"
+            <div class="tab-pane fade show active" id="self_drive" role="tabpanel"
                  aria-labelledby="self-drive-tab">
                 <form id="autoroyal-advance-search-form"
                       action="<?php echo get_permalink($vehicles_search_url); ?>"
@@ -217,11 +217,9 @@ class ShortCode extends BaseController
 
                                                     <div class="title"><?php esc_html_e('Pick-up date', 'autoroyal'); ?></div>
                                                     <div class="form-group input-append mt-2">
-                                                        YY
                                                         <input type="text" name="rezerve-pickup-date"
                                                                placeholder="<?php esc_attr_e('Choose a date', 'autoroyal'); ?>"
                                                                class="daySelect" id="curentDay-filter"
-                                                               value="<?php echo isset($_GET['rezerve-pickup-date']) ? $_GET['rezerve-pickup-date'] : '' ?>"
                                                                autocomplete="off">
                                                     </div>
 
@@ -246,11 +244,9 @@ class ShortCode extends BaseController
 
                                                     <div class="title"><?php esc_html_e('Return date', 'autoroyal'); ?></div>
                                                     <div class="form-group input-append mt-2">
-                                                        XX
                                                         <input type="text" name="rezerve-drop-date"
                                                                placeholder="<?php esc_attr_e('Choose a date', 'autoroyal'); ?>"
                                                                class="daySelect" id="dropDay-filter"
-                                                               value="<?php echo isset($_GET['return-rezerve-pickup-date']) ? $_GET['return-rezerve-pickup-date'] : '' ?>"
                                                                autocomplete="off">
                                                     </div>
 
@@ -313,7 +309,7 @@ class ShortCode extends BaseController
             </div>
 
             <!-- ------------------------------------------- with_driver ---------------------------------------------- -->
-            <div class="tab-pane fade show active" id="with_driver" role="tabpanel" aria-labelledby="with-driver-tab">
+            <div class="tab-pane fade" id="with_driver" role="tabpanel" aria-labelledby="with-driver-tab">
                 <form id="autoroyal-advance-search-form_with_driver"
                       action="<?php echo get_permalink($vehicles_search_url); ?>"
                       method="GET">
@@ -730,34 +726,6 @@ class ShortCode extends BaseController
                     <input type="hidden" value="wedding" name="form_source">
                     <div class="search-form-wrapper">
                         <div class="row">
-
-                            <div class="col-lg-12 col-md-12 right-separator sm-mb-30 md-mb-30">
-                                <div class="btn-block btn-group btn-group-toggle home-search-tab"
-                                     data-toggle="buttons">
-                                    <?php
-                                    $rateRanges = $wpdb->get_results("SELECT *  FROM wp_rate_range  WHERE TYPE = 'WED' AND is_active=1  ORDER BY id ASC ");
-                                    $i = 0;
-                                    foreach ($rateRanges as $rateRange) {
-                                        $active = $i = 0 ? 'active' : '';
-                                        ?>
-                                        <div class="mobile-v col btn btn-secondary <?php echo $active ?>">
-                                            <input type="radio" name="packages"
-                                                   value="<?php echo $rateRange->id ?>"
-                                                   autocomplete="off"
-                                                   checked> <?php echo $rateRange->description ?>
-                                        </div>
-                                        <?php
-                                        $i++;
-
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <div class="row">
                             <div class="col-md-12 mb-2 ">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 right-separator sm-mb-30 md-mb-30">
@@ -1089,7 +1057,10 @@ class ShortCode extends BaseController
                     });
 
                 }
-
+                /*
+                    ' + tabName + '
+                    " + tabName + "
+                    * */
                 if (jQuery("#curentDay-filter" + tabName + "").exists()) {
 
                     jQuery('#curentDay-filter' + tabName + '').datetimepicker({
@@ -1305,6 +1276,8 @@ class ShortCode extends BaseController
                         }
                     });
                 }
+                ;
+
 
                 if (jQuery(".autoroyal-progress-bar-progress").exists()) {
                     jQuery(".autoroyal-progress-bar-progress").on("inview", function (event, isInView) {
@@ -1315,6 +1288,7 @@ class ShortCode extends BaseController
                         }
                     });
                 }
+                ;
 
                 if (jQuery("#cd-item-slider" + tabName + "").exists() || jQuery("#cd-main-carousel" + tabName + "").exists() || jQuery("#rent-me" + tabName + "").exists()) {
                     jQuery("#cd-item-slider" + tabName + ", #cd-main-carousel" + tabName + ", #rent-me" + tabName + "").swipe({
@@ -1380,13 +1354,6 @@ class ShortCode extends BaseController
                         return false;
                     }
                 });
-
-                /** ------------- Change tab according to GET ---------------------*/
-                var get_source = '<?php echo $_GET['form_source']?>';
-                if (get_source != '') {
-                    $('.nav-tabs a[href="#' + get_source + '"]').tab('show');
-                }
-                /** ------------- end Change tab according to GET ---------------------*/
 
 
             });

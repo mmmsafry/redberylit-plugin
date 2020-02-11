@@ -52,11 +52,11 @@ register_deactivation_hook(__FILE__, 'deactivate_redberylit_plugin');
 function rb_get_country_list()
 {
     global $woocommerce;
-    $countries_obj = newWC_Countries();
+    $countries_obj = new WC_Countries();
 
     $countries = $countries_obj->__get('countries');
     $country_list = "";
-    $country_list .= '<select class="form-control">';
+    $country_list .= '<select class="form-control" name="country_list">';
     foreach ($countries as $key => $value) {
         $country_list .= '<option value=' . $value . '>' . $value . '</option>';
 

@@ -129,6 +129,12 @@ class driver extends WP_List_Table
         return $columns;
     }
 
+    public function get_licence_class()
+    {
+        $sql = "SELECT * FROM wp_licence_class";
+        return $this->wpdb->get_results($sql);
+    }
+
     /**
      * Define which columns are hidden
      *
@@ -302,7 +308,9 @@ class driver extends WP_List_Table
                 /**
                  * Add
                  */
-                if (!isset($_REQUEST['edit'])) { ?>
+                if (!isset($_REQUEST['edit'])) {
+                    $instant_driver = new driver();
+                    ?>
                     <form action="?page=<?php echo PAGE_NAME ?>" method="post">
 
                         <!--first_name -->
@@ -340,6 +348,16 @@ class driver extends WP_List_Table
                             <input type="text" name="licence_no" size="40" class="form-control" id="licence_no"
                                    value="">
                         </div>
+
+                        <!--Class  -->
+                        <div class="form-field form-required term-name-wrap">
+                            <label for="licence_no">Licence Class </label>
+                            <?php
+                            $instant_driver->get
+
+                            ?>
+                            <input type="checkbox" name="licence_class[]">
+                        </div>
                         <br>
 
 
@@ -351,7 +369,6 @@ class driver extends WP_List_Table
                 }
 
                 if (isset($_REQUEST['addform'])) {
-                    $instant_driver = new driver();
                     $instant_driver->insert_table($_REQUEST);
                 }
                 ?>

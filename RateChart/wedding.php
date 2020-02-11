@@ -14,13 +14,14 @@ class wedding
 
         /** Tables */
         $this->table_post = $this->wpdb->prefix . 'posts';
-        $this->table_rate_chart = $this->wpdb->prefix . 'postmeta';
+        $this->table_rate_chart = $this->wpdb->prefix . 'rate_chart';
 
         $fields = [
             ['field_name' => 'hour_rate_4'],
             ['field_name' => 'hour_rate_8'],
             ['field_name' => 'hour_rate_12'],
-            ['field_name' => 'extra_hour']
+            ['field_name' => 'extra_hour'],
+            ['field_name' => 'excess_km_charge']
         ];
 
         foreach ($fields as $key => $field) {
@@ -30,20 +31,23 @@ class wedding
 
     public function getVehicleList()
     {
-        $q = "SELECT
-                    p.ID AS post_id, p.post_name, p.post_title, p.post_status, p.post_name, p.post_type, rc.id, rc.wp_vehicle_category_id, 
-                    rc.deposit, rc.extra_amount_per_km, rc.extra_amount_per_hour, rc.wedding_per_hour, rc.wedding_extra_hour_km, rc.drop_hire_per_km, 
-                    vc.`name` AS category_description, rc.driver_charges 
+        $sql = "SELECT
+                    p.ID AS post_id, p.post_name, p.post_title, p.post_status, p.post_name, p.post_type, rc.id, rc.wp_vehicle_category_id, rc.deposit, rc.extra_amount_per_km, 
+                    rc.extra_amount_per_hour, rc.wedding_per_hour, rc.wedding_extra_hour_km, rc.drop_hire_per_km, vc.`name` AS category_description 
                 FROM
-                    wp_posts p
-                    LEFT JOIN wp_rate_chart rc ON rc.wp_post_ID = p.ID
-                    LEFT JOIN wp_vehicles_cat vc ON vc.id = rc.wp_vehicle_category_id 
+                    $this->table_post p
+                    LEFT JOIN $this->table_rate_chart rc ON rc.wp_post_ID = p.ID
+                    LEFT JOIN wp_vehicles_cat vc ON vc.id = rc.wp_vehicle_category_id
+                    INNER JOIN wp_postmeta ON p.ID = wp_postmeta.post_id 
                 WHERE
                     p.post_type = 'vehicle' 
                     AND p.post_status = 'publish' 
-                ORDER BY
+                    AND wp_postmeta.meta_key = 'service_type'  
+                    AND wp_postmeta.meta_value LIKE '%\"4\"%'
+                GROUP BY
                     p.ID DESC";
-        return $vehicle_list = $this->wpdb->get_results($q);
+
+        return $vehicle_list = $this->wpdb->get_results($sql);
     }
 
     public function getData($postID)
@@ -113,6 +117,7 @@ $rateObject = new wedding();
 </script>
 <div class="wrap">
 
+
     <h2 class="wp-heading-inline">Wedding Rates </h2>
     <div class="page-table" style="overflow: auto;" id="table-div">
         <table class="widefat display" id="example">
@@ -121,8 +126,8 @@ $rateObject = new wedding();
                 <th rowspan="2" class="headcol" style="height: 55px">#</th>
                 <th rowspan="2" class="headcol space2" style="height: 55px"> Model</th>
                 <th colspan="3" class="bg-lg" style="text-align: center;"><strong>Hourly Rate (LKR) </strong></th>
-                <th rowspan="2"><strong>Extra Hour</strong></th>
-
+                <th rowspan="2"><strong>Excess Hour Charge(LKR)</strong></th>
+                <th rowspan="2"><strong>Excess KM Charge(LKR)</strong></th>
             </tr>
             <tr>
                 <td></td>
@@ -156,7 +161,6 @@ $rateObject = new wedding();
                     $i++;
                 }
             }
-
             ?>
             </tbody>
         </table>

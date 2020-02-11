@@ -96,6 +96,14 @@ class Admin extends BaseController
                 'capability' => 'manage_options',
                 'menu_slug' => 'redberylit_rate_wedding',
                 'callback' => [$this->callbacks, 'wedding']
+            ],
+            [
+                'parent_slug' => 'redberylit_plugin',
+                'page_title' => 'Rate Settings',
+                'menu_title' => 'Settings',
+                'capability' => 'manage_options',
+                'menu_slug' => 'redberylit_rate_settings',
+                'callback' => [$this->callbacks, 'settings']
             ]/*
                    [
                 'parent_slug' => 'redberylit_plugin',

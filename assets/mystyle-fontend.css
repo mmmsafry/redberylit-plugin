@@ -28,13 +28,14 @@
 }
 
 #airport_transfers .btn-secondary, #airport_transfers .btn-secondary:hover {
-    background-color: #594f4f;
+    background-color: #2c425d
     color: #fff;
 }
 
 #airport_transfers .active, #airport_transfers .active:hover {
-    background-color: #50a70d;
+    background-color: #0d9912;
     color: #fff;
+    border: transparent;
 }
 
 /** google map css */
@@ -42,4 +43,18 @@
     padding: 3px;
     font-weight: 800;
     color: #488ef6;
+}
+
+
+/*******tab css home page***********************/
+@media only screen and (min-width : 320px) {
+    .home-search-tab .mobile-v {
+        width:100%;
+    }
+}
+@media only screen and (min-width: 768px) {
+    .home-search-tab .mobile-v {
+        width:25%;
+        font-size: 0.8rem;
+    }
 }

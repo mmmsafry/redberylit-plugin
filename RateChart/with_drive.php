@@ -132,9 +132,24 @@ class with_drive
     /** Private Functions */
     private function getVehicleList()
     {
-        return $vehicle_list = $this->wpdb->get_results("SELECT p.ID AS post_id, p.post_name, p.post_title, p.post_status, p.post_name, p.post_type,
-    rc.id, rc.wp_vehicle_category_id, rc.deposit, rc.extra_amount_per_km, rc.extra_amount_per_hour, rc.wedding_per_hour, rc.wedding_extra_hour_km, rc.drop_hire_per_km, vc.`name` AS category_description, rc.driver_charges  
-    FROM $this->table_post p LEFT JOIN $this->table_rate_chart rc ON rc.wp_post_ID = p.ID  LEFT JOIN wp_vehicles_cat vc ON vc.id = rc.wp_vehicle_category_id   WHERE p.post_type = 'vehicle' AND p.post_status='publish' ORDER BY  p.ID DESC");
+        $sql = "SELECT
+                    p.ID AS post_id, p.post_name, p.post_title, p.post_status, p.post_name, p.post_type, rc.id, rc.wp_vehicle_category_id, rc.deposit, rc.extra_amount_per_km, 
+                    rc.extra_amount_per_hour, rc.wedding_per_hour, rc.wedding_extra_hour_km, rc.drop_hire_per_km, vc.`name` AS category_description 
+                FROM
+                    $this->table_post p
+                    LEFT JOIN $this->table_rate_chart rc ON rc.wp_post_ID = p.ID
+                    LEFT JOIN wp_vehicles_cat vc ON vc.id = rc.wp_vehicle_category_id
+                    INNER JOIN wp_postmeta ON p.ID = wp_postmeta.post_id 
+                WHERE
+                    p.post_type = 'vehicle' 
+                    AND p.post_status = 'publish' 
+                    AND wp_postmeta.meta_key = 'service_type'  
+                    AND wp_postmeta.meta_value LIKE '%\"1\"%'
+                GROUP BY
+                    p.ID DESC";
+
+        return $vehicle_list = $this->wpdb->get_results($sql);
+
     }
 
     private function updateSingleRate($preFix, $data, $rate_chart_id)
